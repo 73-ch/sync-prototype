@@ -141,10 +141,10 @@ async function setup() {
   // })
 
   const generateFreq = generateDevice.parametersById.get("freq");
-  generateFreq.value = 10000;
+  generateFreq.value = 7300;
   console.log(generateFreq);
   const analyzeFreq = analyzeDevice.parametersById.get("center_freq");
-  analyzeFreq.value = 10000;
+  analyzeFreq.value = 7300;
 
   // const analyzeSpeed = analyzeDevice.parametersById.get("speed");
   // analyzeSpeed.value = 0.05;
@@ -161,8 +161,10 @@ async function setup() {
       console.log("avg: ", ev.payload);
       const average = ev.payload as number;
 
+      if (average === 0 ) return;
+
       const diff = average / 1840 * 96000;
-      const calcDiff = beforeDiff - (beforeDiff - diff) * 0.05;
+      const calcDiff = beforeDiff - (beforeDiff - diff) * 0.037;
 
       diffParams.forEach((p: Parameter) => p.value = calcDiff);
 
@@ -213,7 +215,12 @@ async function setup() {
 
   // complete initialized
   initialized.value = true;
+
+  document.body.addEventListener("click", () => {
+    document.body.requestFullscreen({navigationUI: "hide"});
+  });
 }
+
 </script>
 
 <template>

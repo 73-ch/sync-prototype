@@ -10,10 +10,25 @@
 		}
 ,
 		"classnamespace" : "rnbo",
-		"rect" : [ -1886.0, 87.0, 892.0, 959.0 ],
+		"rect" : [ 34.0, 106.0, 901.0, 1029.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"title" : "analyze-pulse",
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-102",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 298.071468114852905, 742.528723239898682, 65.0, 23.0 ],
+					"rnbo_classname" : "speedlim",
+					"rnbo_serial" : 6,
+					"rnbo_uniqueid" : "speedlim_obj-102",
+					"text" : "speedlim 5"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-65",
 					"maxclass" : "newobj",
@@ -966,7 +981,7 @@
 						"safemath" : 1
 					}
 ,
-					"rnbo_serial" : 3,
+					"rnbo_serial" : 4,
 					"rnbo_uniqueid" : "codebox_obj-120",
 					"rnboinfo" : 					{
 						"needsInstanceInfo" : 1,
@@ -1776,7 +1791,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 298.071468114852905, 727.619140863418579, 29.5, 23.0 ],
+					"patching_rect" : [ 298.071468114852905, 705.747114658355713, 29.5, 23.0 ],
 					"rnbo_classname" : "f",
 					"rnbo_extra_attributes" : 					{
 						"initial" : 0.0
@@ -3109,7 +3124,7 @@
 						"order" : "0"
 					}
 ,
-					"rnbo_serial" : 25,
+					"rnbo_serial" : 45,
 					"rnbo_uniqueid" : "gain",
 					"rnboinfo" : 					{
 						"needsInstanceInfo" : 1,
@@ -3497,7 +3512,7 @@
 						"changesPatcherIO" : 0
 					}
 ,
-					"text" : "param gain @value 180 @min 0 @max 500",
+					"text" : "param gain @value 300 @min 0 @max 500",
 					"varname" : "gain"
 				}
 
@@ -4542,6 +4557,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-57", 0 ],
+					"source" : [ "obj-102", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-114", 0 ],
 					"source" : [ "obj-112", 0 ]
 				}
@@ -4793,7 +4815,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-57", 0 ],
+					"destination" : [ "obj-102", 0 ],
 					"source" : [ "obj-56", 0 ]
 				}
 
