@@ -160,7 +160,7 @@ async function setup() {
 <template>
   <video id="video" autoplay playsinline ref="videoRef" width="120" height="90" style="display: none"></video>
   <canvas v-show="initialized" ref="canvasRef"  style="display: none"></canvas>
-  <button v-if="!initialized" @click="setup" ref="setup-button">setup</button>
+  <button v-if="!initialized" @click="setup" ref="setup-button">start</button>
   <h1 style="display: none">brightness: {{ brightness }}, white: {{ whitePercentage.toFixed(2) }}</h1>
 </template>
 
