@@ -19,95 +19,15 @@ const videoRef = ref<HTMLVideoElement>();
 const brightness = ref("0");
 const whitePercentage = ref(0);
 
-function calculateAverageBrightness() {
-  if (!videoRef.value || !canvasRef.value || !canvasContext) {
-    console.error("update video image failed");
-    return;
-  }
-
-  // 初期化がまだでビデオサイズが0の場合は処理を省く
-  if (!videoRef.value?.videoWidth || !videoRef.value?.videoHeight) {
-    console.warn(`video resolution invalid ${videoRef.value?.videoWidth}x${videoRef.value?.videoHeight}`);
-    return;
-  }
-
-  // Canvasのサイズをビデオに合わせる
-  canvasRef.value.width = videoRef.value.videoWidth;
-  canvasRef.value.height = videoRef.value.videoHeight;
-
-  // Canvasに現在のビデオフレームを描画
-  canvasContext.drawImage(videoRef.value, 0, 0, canvasRef.value.width, canvasRef.value.height);
-
-  // 画像データを取得
-  const imageData = canvasContext.getImageData(0, 0, canvasRef.value.width, canvasRef.value.height);
-  const data = imageData.data;
-
-  let totalBrightness = 0;
-  let whitePixelCount = 0;
-  // 白と判定する閾値 (255に近い値)
-  const whiteThreshold = 220;
-
-  // 各ピクセルの明度を計算
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i];     // 赤
-    const g = data[i + 1]; // 緑
-    const b = data[i + 2]; // 青
-
-    // 明度 = (0.2126 * R + 0.7152 * G + 0.0722 * B) (加重平均)
-    const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    totalBrightness += brightness;
-
-    // ピクセルが白かを判定
-    if (r >= whiteThreshold && g >= whiteThreshold && b >= whiteThreshold) {
-      whitePixelCount++;
-    }
-
-  }
-
-  // ピクセル数
-  const pixelCount = data.length / 4;
-
-  // 平均明度を計算
-  const averageBrightness = totalBrightness / pixelCount;
-
-  const currentWhitePercentage = ((whitePixelCount / pixelCount) * 100);
-
-  // 前フレームとの差分を計算
-  const difference = Math.abs(currentWhitePercentage - whitePercentage.value);
-
-  // 急激な変化を検出 (閾値を設定)
-  const flashThreshold = 50; // 白い割合が50%以上変化した場合を「急激」と判定
-  if (difference >= flashThreshold) {
-    console.log("detected");
-  }
-
-
-  // 明度を表示
-  brightness.value = averageBrightness.toFixed(2);
-}
-
-async function startCamera() {
-  try {
-    if (!videoRef.value) {
-      console.error("video element not found");
-      return;
-    }
-
-    const stream = await navigator.mediaDevices.getUserMedia({video: {width: 120}});
-    videoRef.value.srcObject = stream;
-  } catch (error) {
-    console.error("カメラの起動に失敗しました:", error);
-  }
-}
-
 async function setup() {
   const generatePulseURL = "rnbo/generate-pulse.export.json";
   const analyzePulseURL = "rnbo/analyze-pulse.export.json";
 
 
   // Create AudioContext
-  const WAContext = window.AudioContext || window.webkitAudioContext;
-  const context = new WAContext();
+  // @ts
+  (window as any).AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
+  const context = new AudioContext();
 
   // Create gain node and connect it to audio output
   const outputNode = context.createGain();
