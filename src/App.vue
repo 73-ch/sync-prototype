@@ -19,6 +19,14 @@ const videoRef = ref<HTMLVideoElement>();
 const brightness = ref("0");
 const whitePercentage = ref(0);
 
+
+// クエリパラメータを取得する関数
+function getQueryParam(name: string): string | null {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
+
 async function setup() {
   const generatePulseURL = "rnbo/generate-pulse.export.json";
   const analyzePulseURL = "rnbo/analyze-pulse.export.json";
@@ -60,6 +68,11 @@ async function setup() {
   //   generatorTheta.value = value;
   // })
 
+  const DEFAULT_SPEED = 0.037;
+  const speedParam = getQueryParam('speed');
+  const speed = speedParam !== null ? parseFloat(speedParam) : DEFAULT_SPEED;
+  const finalSpeed = isNaN(speed) ? DEFAULT_SPEED : speed;
+
   const generateFreq = generateDevice.parametersById.get("freq");
   generateFreq.value = 7300;
   console.log(generateFreq);
@@ -84,7 +97,8 @@ async function setup() {
       if (average === 0 ) return;
 
       const diff = average / 1840 * 96000;
-      const calcDiff = beforeDiff - (beforeDiff - diff) * 0.037;
+      const calcDiff = beforeDiff - (beforeDiff - diff) * finalSpeed;
+      console.log(finalSpeed);
 
       diffParams.forEach((p: Parameter) => p.value = calcDiff);
 
